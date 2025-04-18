@@ -7,6 +7,7 @@
   <title>NovaSearch</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* CSS Variables and Body Styles */
     :root {
       --bg: radial-gradient(circle, #000010, #000);
       --text: #00ffe1;
@@ -59,7 +60,6 @@
       0% {
         background-position-y: 0;
       }
-
       100% {
         background-position-y: 100%;
       }
@@ -70,11 +70,21 @@
       font-weight: 700;
       margin-bottom: 40px;
       z-index: 3;
+      text-align: center;
+      animation: glow 1.5s infinite alternate; /* Pulse glow effect */
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+      }
+      100% {
+        text-shadow: 0 0 20px var(--highlight), 0 0 30px var(--highlight);
+      }
     }
 
     .nova {
       color: var(--accent);
-      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
     }
 
     .search {
@@ -82,13 +92,14 @@
       text-shadow: none;
     }
 
+    /* Search Container Styles */
     .search-container {
       display: flex;
-      align-items: center; /* Align items horizontally */
+      align-items: center;
       width: 100%;
       z-index: 3;
-      margin-bottom: 20px; /* Add some space below the search bar */
-      justify-content: center; /* Center the search bar and button */
+      margin-bottom: 20px;
+      justify-content: center;
     }
 
     .search-bar {
@@ -104,11 +115,6 @@
       box-shadow: 0 0 10px rgba(0, 255, 225, 0.3);
     }
 
-    .search-bar:focus {
-      border-color: var(--highlight);
-      box-shadow: 0 0 15px var(--shadow);
-    }
-
     .search-button {
       padding: 12px 30px;
       font-size: 16px;
@@ -119,7 +125,7 @@
       cursor: pointer;
       transition: background 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-      margin-left: 10px; /* Add some space between the search bar and button */
+      margin-left: 10px;
     }
 
     .search-button:hover {
@@ -187,7 +193,7 @@
 
     /* Bible Verse Box Styles */
     .bible-verse-container {
-      background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+      background-color: rgba(0, 0, 0, 0.5);
       border: 1px solid var(--accent);
       border-radius: 10px;
       padding: 15px;
@@ -207,6 +213,144 @@
       font-weight: bold;
       font-size: 14px;
     }
+
+    /* Task Board Styles */
+    .toggle-task-button {
+      position: fixed;
+      top: 20px;
+      right: 90px;
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 3;
+      text-shadow: 0 0 6px var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      font-weight: bold;
+    }
+
+    .toggle-task-button:hover {
+      background-color: var(--highlight);
+      box-shadow: 0 0 15px var(--shadow);
+    }
+
+    /* Task Menu Styles */
+    .task-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 4;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .task-menu {
+      background-color: #000;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 20px;
+      width: 80%;
+      max-width: 500px;
+      color: var(--text);
+      box-shadow: 0 0 20px var(--shadow);
+      position: relative;
+    }
+
+    .task-menu h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .task-menu input[type="text"] {
+      width: calc(100% - 22px); /* Adjusted for padding and border */
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      background-color: #111;
+      color: var(--text);
+      outline: none;
+    }
+
+    .task-menu button {
+      background-color: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .task-menu button:hover {
+      background-color: var(--highlight);
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task-list li {
+      padding: 10px;
+      border-bottom: 1px solid var(--accent);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    .task-list li.hidden {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .task-list li .delete-button {
+      background-color: transparent;
+      color: var(--accent);
+      border: none;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    .task-menu .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    /* Mobile-Friendly Styles */
+    @media (max-width: 600px) {
+      .search-bar {
+        width: 90%;
+        font-size: 16px;
+      }
+
+      .logo {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .bible-verse-container {
+        width: 90%;
+      }
+
+      .footer {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 
@@ -220,7 +364,7 @@
   </div>
 
   <div class="logo">
-    <span class="nova">Nova</span><span class="search">Search</span>
+    <span class="nova">Nova</span> <span class="search">Search</span>
   </div>
 
   <div class="search-container">
@@ -233,16 +377,17 @@
     <p class="bible-verse-reference" id="bibleVerseReference"></p>
   </div>
 
-<div class="footer">
-  <p>
-    <a href="https://www.chatgpt.com" target="_blank">ChatGPT</a> |
-    <a href="https://www.myninja.ai target="_blank">NinjaAI</a> |
-    <a href="https://www.onecompiler.com" target="_blank">OneCompiler</a>
-  </p>
-  NovaSearch Made by ChatGPT / NinjaAI / OneCompiler AI
-</div>
+  <div class="footer">
+    <p>
+      <a href="https://www.chatgpt.com" target="_blank">ChatGPT</a> |
+      <a href="https://www.myninja.ai" target="_blank">NinjaAI</a> |
+      <a href="https://www.onecompiler.com" target="_blank">OneCompiler</a>
+    </p>
+    NovaSearch Made by ChatGPT / NinjaAI / OneCompiler AI
+  </div>
 
   <button class="theme-button" onclick="toggleThemeMenu()">Theme</button>
+  <button class="toggle-task-button" onclick="toggleTaskMenu()">Tasks</button>
   <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
     <option value="default">Default</option>
     <option value="ocean">Ocean</option>
@@ -251,7 +396,19 @@
     <option value="light">Light</option>
   </select>
 
+  <!-- Task Menu Overlay -->
+  <div class="task-menu-overlay" id="taskMenuOverlay">
+    <div class="task-menu">
+      <h2>Tasks</h2>
+      <button class="close-button" onclick="closeTaskMenu()">X</button>
+      <input type="text" id="taskInput" placeholder="Add a new task..." />
+      <button onclick="addTask()">Add Task</button>
+      <ul class="task-list" id="taskList"></ul>
+    </div>
+  </div>
+
   <script>
+    // Update clock every second
     function updateClock() {
       const now = new Date();
       document.getElementById('clock').innerText = now.toLocaleTimeString();
@@ -259,6 +416,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Load weather information
     async function loadWeather() {
       try {
         const res = await fetch("https://wttr.in/?format=4");
@@ -269,6 +427,7 @@
     }
     loadWeather();
 
+    // Perform search with Google
     function performSearch() {
       const query = document.getElementById('searchInput').value.trim();
       if (query) window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
@@ -282,6 +441,7 @@
     const ctx = canvas.getContext('2d');
     let stars = [];
 
+    // Resize canvas and create stars
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -295,6 +455,7 @@
       }));
     }
 
+    // Animate stars
     function animateStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let star of stars) {
@@ -321,6 +482,7 @@
     resizeCanvas();
     animateStars();
 
+    // Handle theme changes
     function changeTheme(theme) {
       const root = document.documentElement;
       localStorage.setItem('novaTheme', theme);
@@ -357,6 +519,7 @@
       }
     }
 
+    // Theme menu toggle
     function toggleThemeMenu() {
       const select = document.getElementById('themeSelect');
       select.style.display = (select.style.display === 'block') ? 'none' : 'block';
@@ -372,12 +535,12 @@
       themeSelect.style.display = 'none';
     }
 
-    // Bible Verse API (using ES6 async/await)
+    // Load Bible verse from API
     async function fetchBibleVerse() {
       try {
         const response = await fetch('https://bible-api.com/?random=verse');
         const data = await response.json();
-
+        
         document.getElementById('bibleVerseText').innerText = data.text;
         document.getElementById('bibleVerseReference').innerText = data.reference;
       } catch (error) {
@@ -387,9 +550,57 @@
       }
     }
 
+    // Task Management Functions
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = ''; // Clear the current task list
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.textContent = task;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'X';
+        deleteButton.classList.add('delete-button');
+        deleteButton.onclick = () => deleteTask(index);
+        li.appendChild(deleteButton);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        tasks.push(taskText);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        taskInput.value = '';
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function toggleTaskMenu() {
+      const taskMenuOverlay = document.getElementById('taskMenuOverlay');
+      taskMenuOverlay.style.display = taskMenuOverlay.style.display === 'flex' ? 'none' : 'flex';
+      renderTasks(); // Show existing tasks
+    }
+
+    function closeTaskMenu() {
+      const taskMenuOverlay = document.getElementById('taskMenuOverlay');
+      taskMenuOverlay.style.display = 'none';
+    }
+
+    // Initial task and verse rendering
+    renderTasks();
     fetchBibleVerse(); // Load a verse when the page loads
   </script>
 </body>
 
 </html>
-
