@@ -396,99 +396,71 @@
     }
 
     // Load dark mode preference from localStorage
-    document.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeToggle').checked = true;
-      }
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+  document.getElementById('darkModeToggle').checked = true;
+} else {
+  document.getElementById('darkModeToggle').checked = false;
+}
 
-      // Save dark mode preference to localStorage
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      darkModeToggle.addEventListener('click', () => {
-        if (document.body.classList.contains('dark-mode')) {
-          localStorage.setItem('darkMode', 'enabled');
-        } else {
-          localStorage.setItem('darkMode', 'disabled');
-        }
-      });
-    });
+// Open Gemini Chat box
+function openGeminiChat() {
+  document.getElementById('imessageContainer').style.display = 'flex';
+}
 
-    // iMessage-style chat box functionality
-    function openGeminiChat() {
-      const apiKey = localStorage.getItem('geminiApiKey');
-      if (apiKey) {
-        document.getElementById('imessageContainer').style.display = 'flex';
-      } else {
-        alert("Please enter your Gemini API key in the settings first.");
-        openModal();
-      }
-    }
+// Close Gemini Chat box
+function closeGeminiChat() {
+  document.getElementById('imessageContainer').style.display = 'none';
+}
 
-    function closeGeminiChat() {
-      document.getElementById('imessageContainer').style.display = 'none';
-    }
+// Send message to Gemini (implement Gemini API interaction here)
+async function sendMessage() {
+  const inputField = document.getElementById('imessageInput');
+  const message = inputField.value.trim();
+  if (!message) return;
 
-    function sendMessage() {
-      const apiKey = localStorage.getItem('geminiApiKey');
-      const messageInput = document.getElementById('imessageInput');
-      const message = messageInput.value.trim();
+  // Add user message to the chat
+  const userMessageDiv = document.createElement('div');
+  userMessageDiv.classList.add('imessage-message', 'user');
+  userMessageDiv.textContent = message;
+  document.getElementById('imessageMessages').appendChild(userMessageDiv);
 
-      if (message) {
-        // Add user message to the chat
-        addMessage('user', message);
-        messageInput.value = ''; // Clear the input
+  // Scroll to the latest message
+  document.getElementById('imessageMessages').scrollTop = document.getElementById('imessageMessages').scrollHeight;
 
-        // Call the Gemini API
-        callGeminiAPI(apiKey, message);
-      }
-    }
+  inputField.value = '';
 
-    async function callGeminiAPI(apiKey, query) {
-      // Replace with your actual API endpoint
-      const apiUrl = '/api/gemini';
+  // Respond with Gemini AI (this is a placeholder)
+  const geminiResponse = await getGeminiResponse(message);
+  const geminiMessageDiv = document.createElement('div');
+  geminiMessageDiv.classList.add('imessage-message', 'gemini');
+  geminiMessageDiv.textContent = geminiResponse;
+  document.getElementById('imessageMessages').appendChild(geminiMessageDiv);
 
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ apiKey: apiKey, query: query })
-        });
+  document.getElementById('imessageMessages').scrollTop = document.getElementById('imessageMessages').scrollHeight;
+}
 
-        const data = await response.json();
+// Fetch response from Gemini API
+async function getGeminiResponse(message) {
+  const apiKey = localStorage.getItem('geminiApiKey');
+  if (!apiKey) return 'Gemini API Key is not set.';
 
-        if (response.ok) {
-          // Add Gemini's response to the chat
-          addMessage('gemini', data.response);
-        } else {
-          console.error("Error calling Gemini API:", data.error);
-          addMessage('gemini', "Error: Could not get response from Gemini.");
-        }
-      } catch (error) {
-        console.error("Error calling Gemini API:", error);
-        addMessage('gemini', "Error: Could not connect to Gemini.");
-      }
-    }
+  const response = await fetch('https://gemini-api-endpoint', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({ query: message })
+  });
 
-    function addMessage(sender, message) {
-      const messagesContainer = document.getElementById('imessageMessages');
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('imessage-message', sender);
-      messageElement.textContent = message;
-      messagesContainer.appendChild(messageElement);
-
-      // Scroll to the bottom of the chat
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // Handle Enter key in the input field
-    document.getElementById('imessageInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
-    });
-  </script>
-</body>
+  if (response.ok) {
+    const data = await response.json();
+    return data.response || 'Sorry, I didn\'t understand that.';
+  } else {
+    return 'Error reaching Gemini API.';
+  }
+}
+    </script>
+  </body>
 </html>
-
